@@ -307,6 +307,20 @@ files = [
 all = ["flake8 (>=7.1.1)", "mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
 
 [[package]]
+name = "isort"
+version = "8.0.1"
+description = "A Python utility / library to sort Python imports."
+optional = false
+python-versions = ">=3.10.0"
+files = [
+    {file = "isort-8.0.1-py3-none-any.whl", hash = "sha256:28b89bc70f751b559aeca209e6120393d43fbe2490de0559662be7a9787e3d75"},
+    {file = "isort-8.0.1.tar.gz", hash = "sha256:171ac4ff559cdc060bcfff550bc8404a486fee0caab245679c2abe7cb253c78d"},
+]
+
+[package.extras]
+colors = ["colorama"]
+
+[[package]]
 name = "mccabe"
 version = "0.7.0"
 description = "McCabe checker, plugin for flake8"
@@ -775,4 +789,4 @@ zstd = ["backports-zstd (>=1.0.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "e78407ce18c9826105ddcd1dfbd3339c954643502bc795b9fedf364cc320bd89"
+content-hash = "41b37d5b2065a3e2825f3e08a26aec08fa8608aa1fe563558f6d1e44a8c75b92"

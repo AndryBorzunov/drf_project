@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from django.conf.global_settings import MEDIA_URL, MEDIA_ROOT, AUTH_USER_MODEL
+from django.conf.global_settings import AUTH_USER_MODEL, MEDIA_ROOT, MEDIA_URL
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -76,8 +76,8 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": os.getenv("NAME"),
-        "USER": os.getenv("USER"),
-        "PASSWORD": os.getenv("PASSWORD"),
+        "USER": "andry",
+        "PASSWORD": "12345",
         "HOST": os.getenv("HOST"),
         "PORT": os.getenv("PORT"),
     }
