@@ -43,6 +43,7 @@ class Lesson(models.Model):
         help_text="Укажите учебный курс",
         blank=True,
         null=True,
+        related_name="lessons"
     )
 
     description = models.TextField(
