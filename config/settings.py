@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "embed_video",
+    "django_filters",
     "users",
     "lms",
 ]

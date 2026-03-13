@@ -1,6 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from lms.models import Course, Lesson
+
+METHOD_PAY_CHOICES = [("cash", "Наличные"), ("transfer", "Перевод на счет")]
+
 
 class User(AbstractUser):
     username = None
@@ -40,3 +44,59 @@ class User(AbstractUser):
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
+
+
+class Payment(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        help_text="Укажите пользователя",
+        related_name="payments",
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name="Дата оплаты", help_text="Укажите дату оплаты"
+    )
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name="Оплаченный курс",
+        help_text="Выберите учебный курс",
+        related_name="courses",
+    )
+
+    lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name="Оплаченный урок",
+        help_text="Выберите урок",
+        related_name="lessons",
+    )
+
+    amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name="Сумма оплаты",
+        help_text="Введите сумму оплаты",
+    )
+
+    method_pay = models.CharField(
+        max_length=16,
+        choices=METHOD_PAY_CHOICES,
+        default="transfer",
+        verbose_name="Способ оплаты",
+        help_text="Выберите способ оплаты",
+    )
+
+    class Meta:
+        verbose_name = "Платёж"
+        verbose_name_plural = "Платежи"
+        ordering = ["-created_at"]
+        unique_together = ["user", "course", "lesson"]
+        indexes = [models.Index(fields=["user", "course", "lesson"])]
