@@ -6,7 +6,13 @@ from lms.models import Course, Lesson
 class LessonSerializer(ModelSerializer):
     class Meta:
         model = Lesson
-        fields = "__all__"
+        fields = "__All__"
+
+
+class LessonDivSerializer(ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = ("name", "description", "preview")
 
 
 class CourseSerializer(ModelSerializer):
@@ -24,7 +30,7 @@ class CourseSerializer(ModelSerializer):
 
 class CourseDetailSerializer(ModelSerializer):
     lessons_count = SerializerMethodField()
-    lessons = LessonSerializer(many=True, read_only=True)
+    lessons = LessonDivSerializer(many=True, read_only=True)
 
     def get_lessons_count(self, obj):
         if obj.lessons.count():
