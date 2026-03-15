@@ -1,5 +1,10 @@
 from django.urls import path
+from rest_framework.permissions import AllowAny
 from rest_framework.routers import SimpleRouter
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from users.apps import UsersConfig
 from users.views import (
@@ -8,7 +13,7 @@ from users.views import (
     PaymentListAPIView,
     PaymentRetrieveAPIView,
     PaymentUpdateAPIView,
-    UserRegistrationView,
+    UserCreateAPIView,
     UserViewSet,
 )
 
@@ -18,7 +23,12 @@ router = SimpleRouter()
 router.register("", UserViewSet, basename="users")
 
 urlpatterns = [
-    path("register/", UserRegistrationView.as_view(), name="register"),
+    # users
+    path("register/", UserCreateAPIView.as_view(), name="register"),
+    path("login/", TokenObtainPairView.as_view(permission_classes=(AllowAny,)), name="login"),
+    path("token/refresh/", TokenRefreshView.as_view(permission_classes=(AllowAny,)), name="token_refresh"),
+
+    # payments
     path("payments/", PaymentListAPIView.as_view(), name="payments_list"),
     path(
         "payments/<int:pk>", PaymentRetrieveAPIView.as_view(), name="payments_retrieve"
@@ -34,6 +44,7 @@ urlpatterns = [
         PaymentUpdateAPIView.as_view(),
         name="payments_update",
     ),
+
 ]
 
 urlpatterns += router.urls
