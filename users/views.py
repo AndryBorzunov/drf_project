@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, status
+from rest_framework import filters
 from rest_framework.generics import (
     CreateAPIView,
     DestroyAPIView,
@@ -8,9 +8,6 @@ from rest_framework.generics import (
     UpdateAPIView,
 )
 from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
 
 from users.models import Payment, User
 from users.serializers import (
@@ -19,20 +16,6 @@ from users.serializers import (
     UserSerializer,
 )
 
-
-# class UserRegistrationView(APIView):
-#     def post(self, request):
-#         serializer = UserRegistrationSerializer(data=request.data)
-#         if serializer.is_valid():
-#             user = serializer.save()
-#             return Response(
-#                 {
-#                     "message": "Пользователь успешно зарегистрирован",
-#                     "user": {"email": user.email},
-#                 },
-#                 status=status.HTTP_201_CREATED,
-#             )
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserSerializer
@@ -45,13 +28,24 @@ class UserCreateAPIView(CreateAPIView):
         user.save()
 
 
-class UserViewSet(ModelViewSet):
+class UserListAPIView(ListAPIView):
     queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-    def get_serializer_class(self):
-        if self.action == "retrieve":
-            return UserPaymentHistorySerializer
-        return UserSerializer
+
+class UserRetrieveAPIView(RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserPaymentHistorySerializer
+
+
+class UserUpdateAPIView(UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDestroyAPIView(DestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 class PaymentListAPIView(ListAPIView):
