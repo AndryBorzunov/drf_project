@@ -10,12 +10,12 @@ from rest_framework.generics import (
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from users.models import Payment, User
+from users.permissions import IsModer, IsOwner
 from users.serializers import (
     PaymentSerializer,
     UserPaymentHistorySerializer,
     UserSerializer,
 )
-from users.permissions import IsModer, IsOwner
 
 
 class UserCreateAPIView(CreateAPIView):
