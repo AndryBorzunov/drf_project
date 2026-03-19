@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
 
 from users.models import Payment, User
 
@@ -24,9 +25,9 @@ class UserPaymentHistorySerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        user = self.context['request'].user
+        user = self.context["request"].user
         instance = self.instance
 
         # Убираем поля для чужого пользователя
         if instance and instance != user:
-            self.fields.pop('payments', None)
+            self.fields.pop("payments", None)

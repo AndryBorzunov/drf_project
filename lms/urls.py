@@ -9,6 +9,7 @@ from lms.views import (
     LessonListAPIView,
     LessonRetrieveAPIView,
     LessonUpdateAPIView,
+    SubscriptionAPIView,
 )
 
 app_name = LmsConfig.name
@@ -18,6 +19,7 @@ router.register("courses", CourseViewSet)
 
 
 urlpatterns = [
+    # Уроки
     path("lessons/", LessonListAPIView.as_view(), name="lessons_list"),
     path("lessons/<int:pk>/", LessonRetrieveAPIView.as_view(), name="lessons_retrieve"),
     path("lessons/create/", LessonCreateAPIView.as_view(), name="lessons_create"),
@@ -29,6 +31,8 @@ urlpatterns = [
     path(
         "lessons/<int:pk>/update/", LessonUpdateAPIView.as_view(), name="lessons_update"
     ),
+    # Подписки
+    path("subscription/", SubscriptionAPIView.as_view(), name="subscription"),
 ]
 
 urlpatterns += router.urls
