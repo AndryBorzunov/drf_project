@@ -8,9 +8,15 @@ from rest_framework.generics import (
     UpdateAPIView,
 )
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from users.services import (
+    convert_rub_to_usd,
+    create_stripe_price,
+    create_stripe_product,
+    create_stripe_session,
+)
 
 from users.models import Payment, User
-from users.permissions import IsModer, IsOwner
+from users.permissions import IsOwner
 from users.serializers import (
     PaymentSerializer,
     UserPaymentHistorySerializer,
@@ -65,6 +71,16 @@ class PaymentListAPIView(ListAPIView):
 class PaymentCreateAPIView(CreateAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+
+    def perform_create(self, serializer):
+        payment = serializer.save(user=self.request.user)
+        amount_in_dollars = convert_rub_to_usd(payment.amount)
+        product = create_stripe_product()
+        price = create_stripe_price(amount_in_dollars, product)
+        session_id, payment_link = create_stripe_session(price)
+        payment.session_id = session_id
+        payment.link = payment_link
+        payment.save()
 
 
 class PaymentRetrieveAPIView(RetrieveAPIView):
