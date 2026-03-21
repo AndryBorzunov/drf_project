@@ -21,6 +21,9 @@ django-filter = "25.1"
 drf-yasg = "^1.21.15"
 stripe = "^14.4.1"
 forex-python = "^1.9.2"
+celery = "^5.6.2"
+redis = "^7.3.0"
+django-celery-beat = "^2.9.0"
 
 
 [build-system]
