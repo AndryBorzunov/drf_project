@@ -49,7 +49,9 @@ class User(AbstractUser):
 class Payment(models.Model):
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
         verbose_name="Пользователь",
         help_text="Укажите пользователя",
         related_name="payments",
@@ -61,7 +63,7 @@ class Payment(models.Model):
 
     course = models.ForeignKey(
         Course,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
         verbose_name="Оплаченный курс",
@@ -92,6 +94,22 @@ class Payment(models.Model):
         default="transfer",
         verbose_name="Способ оплаты",
         help_text="Выберите способ оплаты",
+    )
+
+    session_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="Id сессии",
+        help_text="Укажите id сессии",
+    )
+
+    link = models.URLField(
+        max_length=512,
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на оплату",
+        help_text="Укажите ссылку на оплату",
     )
 
     class Meta:

@@ -8,6 +8,7 @@ from users.views import (
     PaymentDestroyAPIView,
     PaymentListAPIView,
     PaymentRetrieveAPIView,
+    PaymentSuccessAPIView,
     PaymentUpdateAPIView,
     UserCreateAPIView,
     UserDestroyAPIView,
@@ -51,4 +52,5 @@ urlpatterns = [
         PaymentUpdateAPIView.as_view(),
         name="payments_update",
     ),
+    path("payment/success/", PaymentSuccessAPIView.as_view(), name="payment_success"),
 ]

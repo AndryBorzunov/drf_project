@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "embed_video",
     "django_filters",
     "rest_framework_simplejwt",
+    "drf_yasg",
     "users",
     "lms",
 ]
@@ -134,3 +135,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
+
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
+
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"

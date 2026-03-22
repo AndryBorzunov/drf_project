@@ -1,4 +1,3 @@
-from django.db.models.expressions import result
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -23,8 +22,7 @@ class LessonAPITestCase(APITestCase):
             owner=self.user,
         )
         self.subscription = Subscription.objects.create(
-            user=self.user,
-            course=self.course
+            user=self.user, course=self.course
         )
         self.client.force_authenticate(user=self.user)
 
@@ -98,9 +96,7 @@ class LessonAPITestCase(APITestCase):
 
     def test_subscription_create(self):
         url = reverse("lms:subscription")
-        data = {
-            "course_id": self.course.pk
-        }
+        data = {"course_id": self.course.pk}
         response = self.client.post(url, data)
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
