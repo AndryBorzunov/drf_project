@@ -14,6 +14,7 @@ from rest_framework.viewsets import ModelViewSet
 from lms.models import Course, Lesson, Subscription
 from lms.paginators import CoursePaginator
 from lms.serializers import CourseDetailSerializer, CourseSerializer, LessonSerializer
+from lms.tasks import send_subscript
 from users.permissions import IsModer, IsOwner
 
 
@@ -40,6 +41,15 @@ class CourseViewSet(ModelViewSet):
         elif self.action in ["destroy"]:
             self.permission_classes = (IsOwner,)
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        emails = []
+        for subscript in instance.subscription.all():
+            user_item = subscript.user
+            emails.append(user_item.email)
+
+        send_subscript.delay(emails, instance.id, instance.name)
 
 
 class LessonCreateAPIView(CreateAPIView):
