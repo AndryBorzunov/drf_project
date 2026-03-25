@@ -1,17 +1,35 @@
+from django.utils import timezone
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from users.models import Payment, User
 
 
-class PaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment
-        fields = "__all__"
+class CustomTokenObtainSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        # Обновляем last_login
+        self.user.last_login = timezone.now()
+        self.user.save(update_fields=["last_login"])
+
+        return data
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
+        fields = "__all__"
+
+
+# class LoginSerializer(UserSerializer):
+#     email = serializers.CharField()
+#     password = serializers.CharField(write_only=True)
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
         fields = "__all__"
 
 
