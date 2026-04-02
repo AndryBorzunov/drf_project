@@ -10,10 +10,12 @@ from rest_framework.generics import (
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.models import Payment, User
 from users.permissions import IsOwner
 from users.serializers import (
+    CustomTokenObtainSerializer,
     PaymentSerializer,
     UserPaymentHistorySerializer,
     UserSerializer,
@@ -35,6 +37,10 @@ class UserCreateAPIView(CreateAPIView):
         user = serializer.save(is_active=True)
         user.set_password(user.password)
         user.save()
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainSerializer
 
 
 class UserListAPIView(ListAPIView):

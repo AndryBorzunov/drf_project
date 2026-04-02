@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from django.conf.global_settings import AUTH_USER_MODEL, MEDIA_ROOT, MEDIA_URL
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     "django_filters",
     "rest_framework_simplejwt",
     "drf_yasg",
+    "django_celery_beat",
     "users",
     "lms",
 ]
@@ -123,10 +125,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
 STATIC_URL = "static/"
 
 MEDIA_URL = "media/"
@@ -140,3 +138,25 @@ STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+CELERY_BEAT_SCHEDULE = {
+    "disable_inactive_users": {
+        "task": "lms.tasks.disable_inactive_users",
+        "schedule": timedelta(days=30),
+    },
+}
+
+EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.getenv("USR_EM")
+EMAIL_HOST_PASSWORD = os.getenv("PSW_EM")
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
